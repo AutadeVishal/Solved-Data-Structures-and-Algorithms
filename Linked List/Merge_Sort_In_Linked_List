@@ -1,0 +1,65 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+ListNode *  merge(ListNode *&l1, ListNode *&l2) {
+    if (!l1) return l2;
+    if (!l2) return l1;
+    if (l2->val < l1->val) {
+        swap(l1, l2);
+    }
+
+    ListNode *temp = l1;
+    ListNode *curr = l1->next;
+    ListNode *curr2 = l2;
+    while (curr && curr2) {
+        if (curr2->val >= temp->val && curr2->val < curr->val) {
+            ListNode *temp2 = curr2;
+            curr2 = curr2->next;
+            temp2->next = curr;
+            temp->next = temp2;
+            temp = temp->next;
+        } else {
+            temp = curr;
+            curr = curr->next;
+        }
+    }
+    if (curr2) temp->next = curr2;
+    return l1;
+}
+ListNode * solve(ListNode * &l1,int size){
+    if(!l1)return nullptr ;
+    if(!l1->next)return l1;
+    ListNode * l2=l1;
+    ListNode * prev=nullptr;
+    int place=0;
+    while(place<size/2){
+        place++;
+        prev=l2;
+        l2=l2->next;
+    }
+   if(prev) prev->next=nullptr;
+   ListNode * left= solve(l1,size/2);
+   ListNode * right= solve(l2,size-size/2);
+    return  merge(left,right);
+   
+}
+    ListNode* sortList(ListNode* head) {
+        int size=0;
+        ListNode * temp=head;
+        while(temp){
+            size++;
+            temp=temp->next;
+        }
+       return  solve(head,size);
+        
+    }
+};

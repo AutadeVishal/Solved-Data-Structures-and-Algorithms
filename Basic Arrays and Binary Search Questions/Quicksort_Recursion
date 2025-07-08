@@ -1,0 +1,48 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int part(vector<int>& arr, int s, int e) {
+    int pivot = arr[s];
+    int count = 0;
+    for (int i = s + 1; i <= e; i++) {
+        if (arr[i] <= pivot) {
+            count++;
+        }
+    }
+    int pivot_index = s + count;
+    swap(arr[s], arr[pivot_index]);
+    int i = s, j = e;
+    while (i < pivot_index && j > pivot_index) {
+        while (arr[i] <= pivot) {
+            i++;
+        }
+        while (arr[j] > pivot) {
+            j--;
+        }
+        if (i < pivot_index && j > pivot_index) {
+            swap(arr[i], arr[j]);
+        }
+    }
+
+    return pivot_index;
+}
+void quicksort(vector<int>& arr, int s, int e) {
+    if (s >= e) {
+        return;
+    }
+
+    int p = part(arr, s, e);
+
+    quicksort(arr, s, p - 1);
+    quicksort(arr, p + 1, e);
+}
+int main() {
+    vector<int> arr = {12, 4, 32, 5, 2, 43};
+    quicksort(arr, 0, arr.size() - 1);
+
+    for (int i = 0; i < arr.size(); i++) {
+        cout << arr[i] << " ";
+    }
+
+    return 0;
+}

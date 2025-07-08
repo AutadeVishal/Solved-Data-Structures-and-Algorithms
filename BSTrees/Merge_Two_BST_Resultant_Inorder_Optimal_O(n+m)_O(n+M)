@@ -1,0 +1,81 @@
+class Solution {
+  public:
+  void solve(vector<int>&v,Node * root){
+      if(!root) return;
+      solve(v,root->left);
+      v.push_back(root->data);
+      solve(v,root->right);
+  }
+    // Function to return a list of integers denoting the node
+    // values of both the BST in a sorted order.
+    vector<int> merge(Node *root1, Node *root2) {
+        if(!root1 && !root2){
+            return {};
+        }
+    stack<Node *>st1;
+    stack<Node *>st2;
+    Node * curr=root1;
+    while(curr){
+        st1.push(curr);
+        curr=curr->left;
+    }
+     Node * curr2=root2;
+    while(curr2){
+        st2.push(curr2);
+        curr2=curr2->left;
+        }
+    if(!st1.empty()){
+        curr=st1.top();
+    }
+    else curr=NULL;
+   
+   
+    if(!st2.empty()){
+      curr2=  st2.top();
+    }
+    else curr2=NULL;
+    vector<int>ans;
+    while(curr || curr2){
+        if(!curr || (curr2 && curr->data>curr2->data)){
+            ans.push_back(curr2->data);
+            if(!st2.empty())st2.pop();
+            if(curr2->right){
+                curr2=curr2->right;
+               
+                    while(curr2){
+                        st2.push(curr2);
+                        curr2=curr2->left;
+                    }
+                   if(!st2.empty()) curr2=st2.top();
+                   else curr2=NULL;
+                
+            }
+            else{
+                if(!st2.empty())curr2=st2.top();
+                else curr2=NULL;
+            }
+        }
+        else{
+            ans.push_back(curr->data);
+            if(!st1.empty())st1.pop();
+            if(curr->right){
+                curr=curr->right;
+               
+                    while(curr){
+                        st1.push(curr);
+                        curr=curr->left;
+                    }
+                    if(!st1.empty())curr=st1.top();
+                    else curr=NULL;
+                
+            }
+            else {
+               if(!st1.empty()) curr=st1.top();
+               else curr=NULL;
+            }
+        }
+    }
+    return ans;
+        
+    }
+};
