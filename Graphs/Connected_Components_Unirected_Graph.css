@@ -1,0 +1,37 @@
+
+class Solution {
+  public:
+  void dfs(int node,vector<vector<int>>&graph,vector<int>&component,vector<bool>&visited){
+      if(visited[node]) return ;
+        visited[node]=true;
+        component.push_back(node);
+        for(auto nbor:graph[node]){
+            if(!visited[nbor]){
+                dfs(nbor,graph,component,visited);
+            }
+        }
+  }
+    vector<vector<int>> getComponents(int V, vector<vector<int>>& edges) {
+        
+        vector<vector<int>>graph(V);
+        for(auto i:edges){
+            int a=i[0];
+            int b=i[1];
+            graph[a].push_back(b);
+            graph[b].push_back(a);
+        }
+        vector<vector<int>>ans;
+        vector<bool>visited(V,false);
+        for(int i=0;i<V;i++){
+           
+            if(!visited[i]){
+                 vector<int>currComponent;
+                 dfs(i,graph,currComponent,visited);
+                 ans.push_back(currComponent);
+            }
+        }
+        return ans;
+        
+        
+    }
+};
